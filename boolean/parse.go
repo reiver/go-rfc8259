@@ -16,7 +16,7 @@ import (
 //	
 //	// ...
 //	
-//	var value bool
+//	var value rfc8259boolean.Boolean
 //	err := rfc8259.ParseTrue(rs, &value)
 //	
 //	if nil != err {
