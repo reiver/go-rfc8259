@@ -1,4 +1,4 @@
-package rfc8259
+package rfc8259boolean
 
 import (
 	"io"

@@ -1,4 +1,4 @@
-package rfc8259_test
+package rfc8259boolean_test
 
 import (
 	"testing"
@@ -8,22 +8,22 @@ import (
 
 	"sourcecode.social/reiver/go-utf8"
 
-	"sourcecode.social/reiver/go-rfc8259"
+	"sourcecode.social/reiver/go-rfc8259/boolean"
 )
 
-func TestParseBoolean_success(t *testing.T) {
+func TestParse_success(t *testing.T) {
 
 	tests := []struct{
 		Value []byte
-		Expected bool
+		Expected rfc8259boolean.Boolean
 	}{
 		{
-			Value: []byte("false"),
-			Expected:      false,
+			Value:           []byte("false"),
+			Expected: rfc8259boolean.False(),
 		},
 		{
-			Value: []byte("true"),
-			Expected:      true,
+			Value          : []byte("true"),
+			Expected: rfc8259boolean.True(),
 		},
 	}
 
@@ -32,9 +32,9 @@ func TestParseBoolean_success(t *testing.T) {
 		var reader io.Reader = bytes.NewReader(test.Value)
 		var runescanner io.RuneScanner = utf8.NewRuneScanner(reader)
 
-		var actual bool
+		var actual rfc8259boolean.Boolean
 
-		err := rfc8259.ParseBoolean(runescanner, &actual)
+		err := rfc8259boolean.Parse(runescanner, &actual)
 
 		if nil != err {
 			t.Errorf("For test #%d, did not expect an error but actually got one.", testNumber)
@@ -50,8 +50,8 @@ func TestParseBoolean_success(t *testing.T) {
 
 			if expected != actual {
 				t.Errorf("For test #%d, the actual value is not what was expected.", testNumber)
-				t.Logf("EXPECTED: %t", expected)
-				t.Logf("ACTUAL:   %t", actual)
+				t.Logf("EXPECTED: %#v", expected)
+				t.Logf("ACTUAL:   %#v", actual)
 				t.Logf("VALUE: %#v", test.Value)
 				t.Logf("VALUE: %q", test.Value)
 				continue
@@ -60,7 +60,7 @@ func TestParseBoolean_success(t *testing.T) {
 	}
 }
 
-func TestParseBoolean_failure(t *testing.T) {
+func TestParse_failure(t *testing.T) {
 
 	tests := []struct{
 		Value []byte
@@ -291,15 +291,29 @@ func TestParseBoolean_failure(t *testing.T) {
 		var reader io.Reader = bytes.NewReader(test.Value)
 		var runescanner io.RuneScanner = utf8.NewRuneScanner(reader)
 
-		var actual bool
+		var actual rfc8259boolean.Boolean
 
-		err := rfc8259.ParseBoolean(runescanner, &actual)
+		err := rfc8259boolean.Parse(runescanner, &actual)
 
 		if nil == err {
-			t.Errorf("Expected an error but did not actually get one.")
+			t.Errorf("For test #%d, expected an error but did not actually get one.", testNumber)
 			t.Logf("VALUE: %#v", test.Value)
 			t.Logf("VALUE: %q", test.Value)
 			continue
+		}
+
+
+		{
+			expected := rfc8259boolean.Nothing()
+
+			if expected != actual {
+				t.Errorf("For test #%d, the actual value is not what was expected.", testNumber)
+				t.Logf("EXPECTED: %#v", expected)
+				t.Logf("ACTUAL:   %#v", actual)
+				t.Logf("VALUE: %#v", test.Value)
+				t.Logf("VALUE: %q", test.Value)
+				continue
+			}
 		}
 
 		{
