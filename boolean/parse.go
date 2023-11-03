@@ -23,7 +23,7 @@ import (
 //		return err
 //	}
 //	
-//	fmt.Printf("value = %t\n", value)
+//	fmt.Printf("value = %#v\n", value)
 func Parse(runescanner io.RuneScanner, dst *Boolean) error {
 	if nil == runescanner {
 		return errNilRuneScanner
