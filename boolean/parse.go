@@ -4,6 +4,8 @@ import (
 	"io"
 
 	"sourcecode.social/reiver/go-erorr"
+
+	"sourcecode.social/reiver/go-rfc8259/errors"
 )
 
 // Parse tries to parse a JSON boolean literal — i.e., either 'false' or 'true'.
@@ -17,7 +19,7 @@ import (
 //	// ...
 //	
 //	var value rfc8259boolean.Boolean
-//	err := rfc8259.ParseTrue(rs, &value)
+//	err := rfc8259.Parse(rs, &value)
 //	
 //	if nil != err {
 //		return err
@@ -26,10 +28,10 @@ import (
 //	fmt.Printf("value = %#v\n", value)
 func Parse(runescanner io.RuneScanner, dst *Boolean) error {
 	if nil == runescanner {
-		return errNilRuneScanner
+		return rfc8259errors.ErrNilRuneScanner
 	}
 	if nil == dst {
-		return errNilDestination
+		return rfc8259errors.ErrNilDestination
 	}
 
 	var r rune
@@ -39,26 +41,26 @@ func Parse(runescanner io.RuneScanner, dst *Boolean) error {
 		r, _, err = runescanner.ReadRune()
 		if nil != err {
 			if io.EOF == err {
-				return errUnexpectedEndOfFile
+				return rfc8259errors.ErrUnexpectedEndOfFile
 			}
 
-			return errProblemReadingRune(err)
+			return rfc8259errors.ErrProblemReadingRune(err)
 		}
 
 		if err := runescanner.UnreadRune(); nil != err {
-			return errProblemUnreadingRune(err, r)
+			return rfc8259errors.ErrProblemUnreadingRune(err, r)
 		}
 	}
 
 	switch r {
 	case 'f':
-		if err := ParseFalse(runescanner); nil != err {
+		if err := parseFalse(runescanner); nil != err {
 			return err
 		}
 		*dst = False()
 		return nil
 	case 't':
-		if err := ParseTrue(runescanner); nil != err {
+		if err := parseTrue(runescanner); nil != err {
 			return err
 		}
 		*dst = True()

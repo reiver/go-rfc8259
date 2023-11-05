@@ -4,6 +4,8 @@ import (
 	"io"
 
 	"sourcecode.social/reiver/go-erorr"
+
+	"sourcecode.social/reiver/go-rfc8259/errors"
 )
 
 func errProblemParsingBooleanFalse(expected rune, actual rune) error {
@@ -16,32 +18,32 @@ func errProblemParsingBooleanFalse(expected rune, actual rune) error {
 //
 // Example usage:
 //
-//	var rr io.RuneReader
+//	var runescanner io.RuneScanner
 //	
 //	// ...
 //	
-//	err := rfc8259.ParseFalse(rr)
+//	err := rfc8259.ParseFalse(runescanner)
 //	
 //	if nil != err {
 //		fmt.Printf("We did NOT have a 'false', but instead got the error: %s\n", err)
 //	} else {
 //		fmt.Print("We had a 'false'\n")
 //	}
-func ParseFalse(rr io.RuneReader) error {
-	if nil == rr {
-		return errNilRuneReader
+func parseFalse(runescanner io.RuneScanner) error {
+	if nil == runescanner {
+		return rfc8259errors.ErrNilRuneScanner
 	}
 
 	{
 		const expected rune = 'f'
 
-		r, _, err := rr.ReadRune()
+		r, _, err := runescanner.ReadRune()
 		if nil != err {
 			if io.EOF == err {
-				return errUnexpectedEndOfFile
+				return rfc8259errors.ErrUnexpectedEndOfFile
 			}
 
-			return errProblemReadingRune(err)
+			return rfc8259errors.ErrProblemReadingRune(err)
 		}
 
 		if expected != r {
@@ -52,13 +54,13 @@ func ParseFalse(rr io.RuneReader) error {
 	{
 		const expected rune = 'a'
 
-		r, _, err := rr.ReadRune()
+		r, _, err := runescanner.ReadRune()
 		if nil != err {
 			if io.EOF == err {
-				return errUnexpectedEndOfFile
+				return rfc8259errors.ErrUnexpectedEndOfFile
 			}
 
-			return errProblemReadingRune(err)
+			return rfc8259errors.ErrProblemReadingRune(err)
 		}
 
 		if expected != r {
@@ -69,13 +71,13 @@ func ParseFalse(rr io.RuneReader) error {
 	{
 		const expected rune = 'l'
 
-		r, _, err := rr.ReadRune()
+		r, _, err := runescanner.ReadRune()
 		if nil != err {
 			if io.EOF == err {
-				return errUnexpectedEndOfFile
+				return rfc8259errors.ErrUnexpectedEndOfFile
 			}
 
-			return errProblemReadingRune(err)
+			return rfc8259errors.ErrProblemReadingRune(err)
 		}
 
 		if expected != r {
@@ -86,13 +88,13 @@ func ParseFalse(rr io.RuneReader) error {
 	{
 		const expected rune = 's'
 
-		r, _, err := rr.ReadRune()
+		r, _, err := runescanner.ReadRune()
 		if nil != err {
 			if io.EOF == err {
-				return errUnexpectedEndOfFile
+				return rfc8259errors.ErrUnexpectedEndOfFile
 			}
 
-			return errProblemReadingRune(err)
+			return rfc8259errors.ErrProblemReadingRune(err)
 		}
 
 		if expected != r {
@@ -103,13 +105,13 @@ func ParseFalse(rr io.RuneReader) error {
 	{
 		const expected rune = 'e'
 
-		r, _, err := rr.ReadRune()
+		r, _, err := runescanner.ReadRune()
 		if nil != err {
 			if io.EOF == err {
-				return errUnexpectedEndOfFile
+				return rfc8259errors.ErrUnexpectedEndOfFile
 			}
 
-			return errProblemReadingRune(err)
+			return rfc8259errors.ErrProblemReadingRune(err)
 		}
 
 		if expected != r {

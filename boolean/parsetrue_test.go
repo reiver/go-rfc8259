@@ -1,4 +1,4 @@
-package rfc8259boolean_test
+package rfc8259boolean
 
 import (
 	"testing"
@@ -7,8 +7,6 @@ import (
 	"io"
 
 	"sourcecode.social/reiver/go-utf8"
-
-	"sourcecode.social/reiver/go-rfc8259/boolean"
 )
 
 func TestParseTrue_success(t *testing.T) {
@@ -16,9 +14,9 @@ func TestParseTrue_success(t *testing.T) {
 	var p []byte = []byte("true")
 
 	var reader io.Reader = bytes.NewReader(p)
-	var runereader io.RuneReader = utf8.NewRuneReader(reader)
+	var runescanner io.RuneScanner = utf8.NewRuneScanner(reader)
 
-	err := rfc8259boolean.ParseTrue(runereader)
+	err := parseTrue(runescanner)
 
 	if nil != err {
 		t.Errorf("Did not expect an error but actually got one.")
@@ -215,9 +213,9 @@ func TestParseTrue_failure(t *testing.T) {
 	for testNumber, test := range tests {
 
 		var reader io.Reader = bytes.NewReader(test.Value)
-		var runereader io.RuneReader = utf8.NewRuneReader(reader)
+		var runescanner io.RuneScanner = utf8.NewRuneScanner(reader)
 
-		err := rfc8259boolean.ParseTrue(runereader)
+		err := parseTrue(runescanner)
 
 		if nil == err {
 			t.Errorf("Expected an error but did not actually get one.")
