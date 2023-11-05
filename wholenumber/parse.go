@@ -4,6 +4,8 @@ import (
 	"io"
 
 	"sourcecode.social/reiver/go-erorr"
+
+	"sourcecode.social/reiver/go-rfc8259/errors"
 )
 
 // Parse tries to parse the JSON whole-number literal.
@@ -37,10 +39,10 @@ import (
 //	fmt.Printf("dst = %#v\n", dst)
 func Parse(runescanner io.RuneScanner, dst *WholeNumber) error {
 	if nil == runescanner {
-		return errNilRuneScanner
+		return rfc8259errors.ErrNilRuneScanner
 	}
 	if nil == dst {
-		return errNilDestination
+		return rfc8259errors.ErrNilDestination
 	}
 
 	var buffer [256]byte
@@ -54,9 +56,9 @@ func Parse(runescanner io.RuneScanner, dst *WholeNumber) error {
 			r, _, err = runescanner.ReadRune()
 			if nil != err {
 				if io.EOF == err {
-					return errUnexpectedEndOfFile
+					return rfc8259errors.ErrUnexpectedEndOfFile
 				}
-				return errProblemReadingRune(err)
+				return rfc8259errors.ErrProblemReadingRune(err)
 			}
 		}
 
@@ -79,7 +81,7 @@ func Parse(runescanner io.RuneScanner, dst *WholeNumber) error {
 
 			r, _, err = runescanner.ReadRune()
 			if nil != err && io.EOF != err {
-				return errProblemReadingRune(err)
+				return rfc8259errors.ErrProblemReadingRune(err)
 			}
 			if io.EOF == err {
 	/////////////////////// BREAK
@@ -91,7 +93,7 @@ func Parse(runescanner io.RuneScanner, dst *WholeNumber) error {
 				p = append(p, string(r)...)
 			default:
 				if err := runescanner.UnreadRune(); nil != err {
-					return errProblemUnreadingRune(err, r)
+					return rfc8259errors.ErrProblemUnreadingRune(err, r)
 				}
 	/////////////////////// BREAK
 				break loop
