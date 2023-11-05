@@ -21,6 +21,10 @@ func TestParse_success(t *testing.T) {
 			Value: []byte("0"),
 			Expected: rfc8259naturalnumber.Zero(),
 		},
+		{
+			Value: []byte("-0"),
+			Expected: rfc8259naturalnumber.Something("-0"),
+		},
 
 
 
