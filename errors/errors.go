@@ -10,6 +10,10 @@ const (
 	ErrUnexpectedEndOfFile = erorr.Error("rfc8259: unexpected end-of-file")
 )
 
+func ErrInternalError(msg string) error {
+	return erorr.Errorf("rfc8259: JSON parser had an unexpected internal-error — %s", msg)
+}
+
 func ErrProblemReadingRune(err error) error {
 	return erorr.Errorf("rfc8259: JSON parser had a problem — problem reading rune: %w", err)
 }
